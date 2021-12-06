@@ -31,7 +31,12 @@ class DygraphModel():
 
     # define feeds which convert numpy of batch data to paddle.tensor
     def create_feeds(self, batch_data, config):
-        return paddle.to_tensor(batch_data)
+        mode = config.get("runner.mode")
+        if mode == "train":
+            return paddle.to_tensor(batch_data)
+        else:
+            (out, src), majorInd = batch_data
+            return (paddle.to_tensor(out), paddle.to_tensor(src)), majorInd
 
     # define loss function by predicts and label
     def create_loss(self, inputs, targets):
@@ -73,10 +78,23 @@ class DygraphModel():
         return loss, metrics_list, print_dict
 
     def infer_forward(self, dy_model, metrics_list, batch_data, config):
-        inputs = self.create_feeds(batch_data, config)
-        prediction = dy_model.forward(inputs)
-        # update metrics
-
+        batch_size = config.get('runner.infer_batch_size', None)
+        vector_dim = config.get("hyper_parameters.layer_sizes")[0]
+        (out, src), majorInd  = self.create_feeds(batch_data, config)
+        prediction = dy_model.forward(src)
+        pred = []
+        targ = []
+        for i in range(batch_size):
+            pred_i = prediction[i, 0, :]
+            targ_i = out[i, 0, :]
+            non_zeros = targ_i.nonzero()[0].tolist()
+            # update metrics
+            for ind in non_zeros:
+                pred.append(pred_i[ind])
+                targ.append(targ_i[ind])
         # print_dict format :{'loss': loss}
-        print_dict = {}
+        print_dict = {
+            'prediction': pred,
+            'targets': targ
+                }
         return metrics_list, print_dict
