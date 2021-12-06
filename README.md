@@ -4,10 +4,10 @@
 
 ```
 ├── data # 文档
-		├── train #训练数据
-			├── train_data.txt
-		├── test  #测试数据
-			├── test_data.txt
+	├── train #训练数据
+		├── train_data.txt
+	├── test  #测试数据
+		├── test_data.txt
 ├── __init__.py 
 ├── README.md #文档
 ├── config.yaml # sample数据配置
@@ -33,14 +33,15 @@
 - [FAQ](#FAQ)
 
 ## 模型简介
-
+DeepRecommender使用基于自编码器的协同过滤，加入了一些tricks，达到了比以往的协同过滤方法更好的效果。tricks包括：1. 加大Dropout的比例(0.8); 2. 使用带负值的激活函数selu; 3. 提出Dense re-feeding, 把预测结果重新放回自编码器中作为新的样本再次预测, 以达到数据增强帮助防止模型过拟合
 
 ## 数据准备
-我们在作者处理过的开源数据集Netflix上验证模型效果,在模型目录的data目录下为您准备了快速运行的示例数据，若需要使用全量数据可以参考下方[效果复现](#效果复现)部分.
+我们在作者处理过的开源数据集Netflix上验证模型效果，在模型目录的data目录下为您准备了快速运行的示例数据，若需要使用全量数据可以参考下方[效果复现](#效果复现)部分。
 数据的格式如下：
 生成的格式以\t为分割点
 
 ```
+u_id	i_id	rating
 116	341	3.7
 ```
 
@@ -68,7 +69,7 @@ python -u ../../../tools/static_infer.py -m config.yaml
 ```
 
 ## 模型组网
-DeepRecommender 。模型的主要组网结构如下：
+DeepRecommender是一个自编码器, 由encoder和decoder组成, 在encoder和decoder之间加入了一个drop概率很大的dropout层, 使用selu作为激活函数。模型的主要组网结构如下：
 [DeepRecommender]()
 
 
