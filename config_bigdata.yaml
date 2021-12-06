@@ -17,10 +17,12 @@ runner:
   train_data_dir: "../../../datasets/Netflix/NF_TRAIN"
   train_reader_path: "DeepRecommender_Reader" # importlib format
   use_gpu: True
+  mode: "train"
   epochs: 60
   batch_size: 128
   print_interval: 2
   model_save_path: "output_model_DeepRecommender"
+
   test_data_dir: "../../../datasets/Netflix/NF_TEST"
   infer_reader_path: "DeepRecommender_Reader" # importlib format
   infer_load_path: "output_model_DeepRecommender"
