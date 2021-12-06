@@ -18,21 +18,21 @@ runner:
   train_reader_path: "DeepRecommender_Reader" # importlib format
   use_gpu: False
   mode: "train"
-  epochs: 3
-  batch_size: 2
-  print_interval: 2
+  epochs: 5
+  batch_size: 4
+  print_interval: 100
   model_save_path: "output_model_DeepRecommender"
 
   test_data_dir: "data/test"
   infer_reader_path: "DeepRecommender_Reader" # importlib format
   infer_load_path: "output_model_DeepRecommender"
   infer_start_epoch: 0
-  infer_batch_size: 2
-  infer_end_epoch: 3
+  infer_batch_size: 4
+  infer_end_epoch: 5
 
 hyper_parameters:
   dp_drop_prob: 0.0
-  layer_sizes: [1000, 4, 4]
+  layer_sizes: [1000, 16, 8]
   optimizer:
     class: SGD
     learning_rate: 0.05
