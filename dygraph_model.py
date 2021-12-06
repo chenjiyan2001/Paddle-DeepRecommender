@@ -15,7 +15,7 @@
 import paddle
 import paddle.nn as nn
 import net
-import math
+import numpy as np
 
 
 class DygraphModel():
@@ -35,8 +35,8 @@ class DygraphModel():
         if mode == "train":
             return paddle.to_tensor(batch_data)
         else:
-            (out, src), majorInd = batch_data
-            return (paddle.to_tensor(out), paddle.to_tensor(src)), majorInd
+            out, src = batch_data
+            return paddle.to_tensor(out), paddle.to_tensor(src)
 
     # define loss function by predicts and label
     def create_loss(self, inputs, targets):
@@ -79,8 +79,7 @@ class DygraphModel():
 
     def infer_forward(self, dy_model, metrics_list, batch_data, config):
         batch_size = config.get('runner.infer_batch_size', None)
-        vector_dim = config.get("hyper_parameters.layer_sizes")[0]
-        (out, src), majorInd  = self.create_feeds(batch_data, config)
+        out, src  = self.create_feeds(batch_data, config)
         prediction = dy_model.forward(src)
         pred = []
         targ = []
@@ -94,7 +93,7 @@ class DygraphModel():
                 targ.append(targ_i[ind])
         # print_dict format :{'loss': loss}
         print_dict = {
-            'prediction': pred,
-            'targets': targ
+            'prediction': np.array(pred),
+            'targets': np.array(targ)
                 }
         return metrics_list, print_dict
