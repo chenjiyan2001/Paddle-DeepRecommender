@@ -14,11 +14,9 @@
 
 import paddle
 import os
-import paddle.nn as nn
 import time
 import logging
 import sys
-import importlib
 from math import sqrt
 
 
@@ -28,10 +26,9 @@ sys.path.append(os.path.abspath(os.path.join(__dir__, '..')))
 sys.path.append(os.path.abspath('/'.join(__dir__.split('/')[:-3])))
 
 from tools.utils.utils_single import load_yaml, load_dy_model_class, get_abs_model
-from tools.utils.save_load import save_model, load_model
-from paddle.io import DistributedBatchSampler, DataLoader
+from tools.utils.save_load import load_model
+from paddle.io import DataLoader
 import argparse
-import numpy as np
 from importlib import import_module
 
 logging.basicConfig(
@@ -159,11 +156,9 @@ def main(args):
                 infer_reader_cost = 0.0
                 infer_run_cost = 0.0
             step_num = step_num + 1
-            prediction = tensor_print_dict['prediction']
-            targets = tensor_print_dict['targets']
-        
-            denom += sum((prediction - targets)**2)
-            n += len(targets)
+
+            denom += tensor_print_dict['SE']
+            n += tensor_print_dict['num']
 
         metric_str = "RMSE: %.5f" % sqrt(denom/n)
 
