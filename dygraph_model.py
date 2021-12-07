@@ -82,11 +82,11 @@ class DygraphModel():
         prediction = dy_model.forward(src)
 
         idx = out.numpy().nonzero()
-        SE = float(paddle.square(prediction[idx] - out[idx]).sum())
+        SE = paddle.square(prediction[idx] - out[idx]).sum()
         num = np.count_nonzero(out)
         # print_dict format :{'loss': loss}
         print_dict = {
             'SE': SE,
-            'num': num
-                }
+            'num': num,
+        }
         return metrics_list, print_dict
