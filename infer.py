@@ -135,7 +135,9 @@ def main(args):
         infer_reader_cost = 0.0
         infer_run_cost = 0.0
         reader_start = time.time()
-
+        
+        denom = 0.0
+        n = 0
         for batch_id, batch in enumerate(test_dataloader()):
             infer_reader_cost += time.time() - reader_start
             infer_start = time.time()
@@ -160,8 +162,8 @@ def main(args):
             prediction = tensor_print_dict['prediction']
             targets = tensor_print_dict['targets']
         
-        denom = sum((prediction - targets)**2)
-        n = len(targets)
+            denom += sum((prediction - targets)**2)
+            n += len(targets)
 
         metric_str = "RMSE: %.5f" % sqrt(denom/n)
 
