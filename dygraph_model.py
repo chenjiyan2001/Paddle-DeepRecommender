@@ -43,7 +43,7 @@ class DygraphModel():
         mask = paddle.where(targets != 0, paddle.ones(targets.shape),
                             paddle.zeros(targets.shape))
         num_ratings = paddle.sum(mask)
-        criterion = nn.MSELoss()
+        criterion = nn.MSELoss('sum')
         loss = criterion(inputs * mask, targets) / num_ratings
         return loss
 
