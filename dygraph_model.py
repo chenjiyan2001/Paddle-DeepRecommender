@@ -78,22 +78,15 @@ class DygraphModel():
         return loss, metrics_list, print_dict
 
     def infer_forward(self, dy_model, metrics_list, batch_data, config):
-        batch_size = config.get('runner.infer_batch_size', None)
         out, src  = self.create_feeds(batch_data, config)
         prediction = dy_model.forward(src)
-        pred = []
-        targ = []
-        for i in range(batch_size):
-            pred_i = prediction[i, 0, :]
-            targ_i = out[i, 0, :]
-            non_zeros = targ_i.nonzero()[0].tolist()
-            # update metrics
-            for ind in non_zeros:
-                pred.append(pred_i[ind])
-                targ.append(targ_i[ind])
+
+        idx = out.numpy().nonzero()
+        SE = float(paddle.square(prediction[idx] - out[idx]).sum())
+        num = len(idx[0])
         # print_dict format :{'loss': loss}
         print_dict = {
-            'prediction': np.array(pred),
-            'targets': np.array(targ)
+            'SE': SE,
+            'num': num
                 }
         return metrics_list, print_dict
