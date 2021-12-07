@@ -106,14 +106,6 @@ def main(args):
 
     dy_model = dy_model_class.create_model(config)
 
-    # Create a log_visual object and store the data in the path
-    if use_visual:
-        from visualdl import LogWriter
-        log_visual = LogWriter(args.abs_dir + "/visualDL_log/infer")
-
-    # to do : add optimizer function
-    #optimizer = dy_model_class.create_optimizer(dy_model, config)
-
     logger.info("read data")
     test_dataloader = create_data_loader(
         config=config, place=place)
@@ -156,7 +148,7 @@ def main(args):
                 infer_reader_cost = 0.0
                 infer_run_cost = 0.0
             step_num = step_num + 1
-
+            
             denom += tensor_print_dict['SE']
             n += tensor_print_dict['num']
 
