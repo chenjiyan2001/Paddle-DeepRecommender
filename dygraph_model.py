@@ -83,7 +83,7 @@ class DygraphModel():
 
         idx = out.numpy().nonzero()
         SE = float(paddle.square(prediction[idx] - out[idx]).sum())
-        num = len(idx[0])
+        num = np.count_nonzero(out)
         # print_dict format :{'loss': loss}
         print_dict = {
             'SE': SE,
