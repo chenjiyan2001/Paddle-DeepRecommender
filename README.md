@@ -74,7 +74,7 @@ DeepRecommender是一个自编码器, 由encoder和decoder组成, 在encoder和d
 
 | 模型 | rmse   | layer_sizes             | batch_size | epoch_num | Time of each epoch |
 | :------| :------ | :------ | :------| :------ | -------|
-| DeepRecommender | 0.9103 | [17768, 512, 512, 1024] | 128        | 45        | 约1分半 |
+| DeepRecommender | 0.9103 | [17768, 512, 512, 1024] | 128        | 45        | 约55秒 |
 
 在其他数据下模型的指标如下：
 | 数据集 | rmse   | layer_sizes            | batch_size | epoch_num | Time of each epoch |
