@@ -33,7 +33,7 @@ class RecDataset(IterableDataset):
         self.init()
 
     def init(self):
-        self.batch_size = self.config.get("runner.batch_size")
+        self.batch_size = self.config.get("runner.reader_batch_size", 1)
         user_id_map = defaultdict(int)
         item_id_map = defaultdict(int)
 
@@ -63,7 +63,8 @@ class RecDataset(IterableDataset):
                     value = minor_map[int(parts[1])]
                     rating = np.float32(parts[2])
                     self.train_data[key].append((value, rating))
-
+            
+            
         if self.test_list:
             for source_file in self.test_list:
                 with open(source_file, 'r') as src:
@@ -107,7 +108,6 @@ class RecDataset(IterableDataset):
             keys = list(test_data.keys())
             shuffle(keys)
             s_ind = 0
-            e_ind = self.batch_size
             while s_ind < len(keys):
                 inds1 = [0] * len([v[0] for v in self.test_data[keys[s_ind]]])
                 inds2 = [v[0] for v in self.test_data[keys[s_ind]]]
