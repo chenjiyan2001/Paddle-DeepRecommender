@@ -43,13 +43,19 @@ class DygraphModel():
         mask = paddle.where(targets != 0, paddle.ones(targets.shape),
                             paddle.zeros(targets.shape))
         num_ratings = paddle.sum(mask)
-        criterion = nn.MSELoss('sum')
-        loss = criterion(inputs * mask, targets) / num_ratings
+        loss = nn.functional.mse_loss(inputs * mask, targets, reduction='sum') / num_ratings
         return loss
+    # def create_loss(self, inputs, targets):
+    #     mask = paddle.where(targets != 0, paddle.ones(targets.shape),
+    #                         paddle.zeros(targets.shape))
+    #     num_ratings = paddle.sum(mask)
+    #     criterion = nn.MSELoss('sum')
+    #     loss = criterion(inputs * mask, targets) / num_ratings
+    #     return loss
 
     # define optimizer
     def create_optimizer(self, dy_model, config):
-        lr = config.get("hyper_parameters.optimizer.learning_rate", 0.001)
+        lr = config.get("hyper_parameters.optimizer.learning_rate", 0.005)
         momentum = config.get("hyper_parameters.optimizer.momentum", 0.9)
         weight_decay = config.get("hyper_parameters.optimizer.weight_decay",
                                   0.0)
@@ -59,7 +65,7 @@ class DygraphModel():
                                               learning_rate=scheduler,
                                               momentum=momentum,
                                               weight_decay=weight_decay)
-        return optimizer
+        return optimizer, scheduler
 
     def create_metrics(self):
         metrics_list_name = []
@@ -75,7 +81,7 @@ class DygraphModel():
 
         # print_dict format :{'loss': loss}
         print_dict = {'loss': loss}
-        return loss, metrics_list, print_dict
+        return outputs, loss, metrics_list, print_dict
 
     def infer_forward(self, dy_model, metrics_list, batch_data, config):
         out, src  = self.create_feeds(batch_data, config)
