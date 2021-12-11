@@ -86,7 +86,7 @@ def main(args):
     use_visual = config.get("runner.use_visual", False)
     test_data_dir = config.get("runner.test_data_dir", None)
     print_interval = config.get("runner.print_interval", None)
-    infer_batch_size = config.get("runner.infer_batch_size", None)
+    infer_batch_size = config.get("runner.infer_batch_size", 1)
     model_load_path = config.get("runner.infer_load_path", "model_output")
     start_epoch = config.get("runner.infer_start_epoch", 0)
     end_epoch = config.get("runner.infer_end_epoch", 10)
