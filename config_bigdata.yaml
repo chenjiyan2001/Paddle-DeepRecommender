@@ -16,25 +16,24 @@
 runner:
   train_data_dir: "../../../datasets/Netflix/NF_TRAIN"
   train_reader_path: "DeepRecommender_Reader" # importlib format
+  reader_batch_size: 128
   use_gpu: True
   mode: "train"
   epochs: 60
-  batch_size: 128
   print_interval: 1000
   model_save_path: "output_model_DeepRecommender"
 
   test_data_dir: "../../../datasets/Netflix/NF_TEST"
   infer_reader_path: "DeepRecommender_Reader" # importlib format
   infer_load_path: "output_model_DeepRecommender"
-  infer_start_epoch: 39
+  infer_start_epoch: 30
   infer_batch_size: 128
-  infer_end_epoch: 45
+  infer_end_epoch: 39
 
 hyper_parameters:
   dp_drop_prob: 0.8
   layer_sizes: [17768, 512, 512, 1024]
   optimizer:
-    class: SGD
     learning_rate: 0.005
     momentum: 0.9
     weight_decay: 0.0
